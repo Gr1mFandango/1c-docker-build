@@ -18,6 +18,8 @@ services:
     volumes:
       - srv_data:/home/usr1cv8/.1cv8
       - srv_log:/var/log/1C
+    devices:
+      - /dev/aks/hasp/1-2.1:/dev/aks/hasp/1-2.1
     networks:
       - back_net
 
