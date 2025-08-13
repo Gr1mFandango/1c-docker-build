@@ -1,0 +1,73 @@
+services:
+  server:
+    image: ${DOCKER_USERNAME}/onec-server:${ONEC_VERSION}
+    container_name: onec_server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      args:
+        ONEC_USERNAME: ${ONEC_USERNAME}
+        ONEC_PASSWORD: ${ONEC_PASSWORD}
+        ONEC_VERSION: ${ONEC_VERSION}
+    depends_on:
+      - db
+    hostname: ${HOSTNAME}
+    ports:
+      - "1540-1541:1540-1541"
+      - "1560:1560"
+    volumes:
+      - srv_data:/home/usr1cv8/.1cv8
+      - srv_log:/var/log/1C
+    networks:
+      - back_net
+
+  db:
+    image: rsyuzyov/docker-postgresql-pro-1c
+    container_name: db
+    ports:
+      - "${PG_PORT}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+    networks:
+      - back_net
+
+  client:
+    image: ${DOCKER_USERNAME}/onec-client:${ONEC_VERSION}
+    container_name: onec_client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        ONEC_USERNAME: ${ONEC_USERNAME}
+        ONEC_PASSWORD: ${ONEC_PASSWORD}
+        ONEC_VERSION: ${ONEC_VERSION}
+    volumes:
+      - client_data:/home/usr1cv8/onec_data
+    ports:
+      - "6080:6080"
+    depends_on:
+      - db
+    networks:
+      - back_net
+
+  ras:
+    image: ${DOCKER_USERNAME}/onec-server:${ONEC_VERSION}
+    container_name: onec_ras
+    entrypoint: /opt/1cv8/x86_64/${ONEC_VERSION}/ras
+    command: "cluster srv:1540"
+    ports:
+      - "${RAS_PORT:-1545}:1545"
+    depends_on:
+      - server
+    networks:
+      - back_net
+
+volumes:
+  srv_data: {}
+  srv_log: {}
+  db_data: {}
+  repo_data: {}
+  client_data: {}
+
+networks:
+  back_net: {}
