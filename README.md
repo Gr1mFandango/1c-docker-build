@@ -1,2 +1,22 @@
 # 1c-docker-build
-1C server + client + postgres + ras builds in docker
+•	Сервер 1С
+•	Клиент 1С
+•	Postgresql-pro
+•	RAS 
+
+
+## Перед установкой необходимо заполнить переменный среды в файле *.env.example* и переименовать файл в *.env*:
+
+ONEC_USERNAME=<userИТС>
+ONEC_PASSWORD=<парольИТС>
+ONEC_VERSION=<указываем версию платформы (пока работают только 8.3.20 и выше)>
+HOSTNAME=1C_server <указываем имя хоста>
+DOCKER_USERNAME=<user dockerhub (будет использован для создания имён образов, которые впоследствии удобно грузить на dockerhub, если есть такая необходимость). ЕСЛИ НЕТ УЧЁТКИ – МОЖНО ВВЕСТИ ЛЮБОЕ ИМЯ>
+HASP_SERVER=<ip адрес сервера лицензий HASP>
+RAS_PORT=1545
+PG_PORT=5432
+
+## Запуск контейнеров
+
+chmod +x ./make.sh
+./make.sh
