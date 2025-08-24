@@ -19,4 +19,5 @@ PG_PORT=5432
 #### Запуск контейнеров
 
 chmod +x ./make.sh
+
 ./make.sh
